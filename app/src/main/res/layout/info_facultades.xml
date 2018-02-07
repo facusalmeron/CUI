@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:weightSum="1"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_weight="0.15"
+        android:weightSum="1"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_marginTop="15dp"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:textSize="20dp"
+            android:layout_weight="0.1"
+            android:textColor="@color/negro"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:text="Buscar "
+            android:id="@+id/tvInfo" />
+
+        <Spinner
+            android:scrollbarSize="30dp"
+            android:layout_weight="0.3"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/busquedaSpinnerInfo" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_weight="0.1"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Buscar"
+            android:id="@+id/boton_busquedaInfo" />
+
+    </LinearLayout>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:id="@+id/imagenFacultad"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/nombreFacultad"
+            android:layout_below="@+id/imagenFacultad"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/localidadFacultad"
+            android:layout_below="@+id/nombreFacultad"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/direccionFacultad"
+            android:layout_below="@+id/localidadFacultad"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/telefonoFacultad"
+            android:layout_below="@+id/direccionFacultad"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/faxFacultad"
+            android:layout_below="@+id/telefonoFacultad"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/paginaFacultad"
+            android:layout_below="@+id/faxFacultad"/>
+
+    </RelativeLayout>
+
+</LinearLayout>
+
