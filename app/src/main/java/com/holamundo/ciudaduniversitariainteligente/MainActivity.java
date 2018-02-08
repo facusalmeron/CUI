@@ -290,7 +290,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 qrBoton.hide();
                 menu.clear();
                 InfoFacultades infoFacultades = new InfoFacultades();
-                fm.beginTransaction().replace(R.id.fragment_container, infoFacultades).commit();
+                fm.beginTransaction().replace(R.id.fragment_container, infoFacultades).addToBackStack(null).commit();
+
+            }
+        }
+        else if (id == R.id.agendaUnl){
+            if (!(fm.findFragmentById(R.id.fragment_container) instanceof AgendaUnl)) {
+                qrBoton.hide();
+                menu.clear();
+                AgendaUnl agenda = new AgendaUnl();
+                fm.beginTransaction().replace(R.id.fragment_container, agenda).addToBackStack(null).commit();
 
             }
         }

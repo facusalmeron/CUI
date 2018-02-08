@@ -13,7 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 /**
- * Created by usuario on 7/1/2018.
+ * Created by Facundo on 7/1/2018.
  */
 
 public class InfoFacultades extends Fragment {
