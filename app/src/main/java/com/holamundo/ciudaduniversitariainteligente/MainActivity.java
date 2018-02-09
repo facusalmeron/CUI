@@ -37,6 +37,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 
@@ -61,8 +63,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ultimasBusquedas ultimasBusquedas = null;
     private Menu menu = null;
     private BaseDatos CUdb = null;
-    private String prueba;
-
+    private List<AgendaDto> listaDto = new ArrayList<AgendaDto>();
+    private Integer total = 100;
     /*Funciones*/
 
     @Override
@@ -102,7 +104,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //Agrego TextView abajo trayendo datos del webService del clima
         textClima = (TextView) findViewById(R.id.textWSClima);
         new HttpAsyncTask().execute("http://api.wunderground.com/api/e8cd515cb766a5bf/lang:SP/forecast/geolookup/q/-31.6182466,-60.7013970,15.json");
-        new HttpAsyncTaskAgenda().execute("https://www.unl.edu.ar/agenda/webapp.php?act=getJerarquicos&cantidad=1");
+        new HttpAsyncTaskAgenda().execute("https://www.unl.edu.ar/agenda/webapp.php?act=getJerarquicos&cantidad=" + String.valueOf(total));
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -115,6 +117,79 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         //Cambio el fragment por defecto por mi mapFragment
         fm.beginTransaction().replace(R.id.fragment_container, mapsFragment).addToBackStack(null).commit();
+    }
+
+    public static String GETAGENDA(String url) {
+        InputStream inputStream = null;
+        String result = "";
+        try {
+
+            // create HttpClient
+            HttpClient httpclient = new DefaultHttpClient();
+
+            // make GET request to the given URL
+            HttpResponse httpResponse = httpclient.execute(new HttpGet(url));
+
+            // receive response as inputStream
+            inputStream = httpResponse.getEntity().getContent();
+
+            // convert inputstream to string
+            if (inputStream != null)
+                result = convertInputStreamToStringAgenda(inputStream);
+            else
+                result = "Did not work!";
+
+        } catch (Exception e) {
+            Log.d("InputStream", e.getLocalizedMessage());
+        }
+
+        return result;
+    }
+
+    private static String convertInputStreamToStringAgenda(InputStream inputStream) throws IOException {
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+        String line = "";
+        String result = "";
+        while ((line = bufferedReader.readLine()) != null)
+            result += line;
+
+        inputStream.close();
+        int tamanio = result.length();
+        result = result.substring(1, tamanio - 1);
+        return result;
+
+    }
+
+    private class HttpAsyncTaskAgenda extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... urls) {
+
+            return GETAGENDA(urls[0]);
+        }
+
+        // onPostExecute displays the results of the AsyncTask.
+        @Override
+        protected void onPostExecute(String result) {
+            try {
+                JSONObject json = new JSONObject(result); //Convierte String a JSONObject
+                int contador = 1;
+                while (contador < total){
+                    AgendaDto dto = new AgendaDto();
+                    dto.setNombreEvento(json.getJSONArray(String.valueOf(contador)).getString(1));
+                    dto.setFechaEvento(json.getJSONArray(String.valueOf(contador)).getString(2));
+                    dto.setUrlEvento(json.getJSONArray(String.valueOf(contador)).getString(3));
+                    listaDto.add(dto);
+                    contador++;
+                }
+
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+        }
     }
 
     public static String GET(String url) {
@@ -194,70 +269,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 String ubicacion = json.getJSONObject("location").getString("city");
 
                 textClima.setText(diaSemana + " " + dia + " " + mes + " - " + temperatura + "ºC - " + ubicacion);
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-
-        }
-    }
-
-    public static String GETAGENDA(String url) {
-        InputStream inputStream = null;
-        String result = "";
-        try {
-
-            // create HttpClient
-            HttpClient httpclient = new DefaultHttpClient();
-
-            // make GET request to the given URL
-            HttpResponse httpResponse = httpclient.execute(new HttpGet(url));
-
-            // receive response as inputStream
-            inputStream = httpResponse.getEntity().getContent();
-
-            // convert inputstream to string
-            if (inputStream != null)
-                result = convertInputStreamToStringAgenda(inputStream);
-            else
-                result = "Did not work!";
-
-        } catch (Exception e) {
-            Log.d("InputStream", e.getLocalizedMessage());
-        }
-
-        return result;
-    }
-
-    private static String convertInputStreamToStringAgenda(InputStream inputStream) throws IOException {
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-        String line = "";
-        String result = "";
-        while ((line = bufferedReader.readLine()) != null)
-            result += line;
-
-        inputStream.close();
-        int tamanio = result.length();
-        result = result.substring(1, tamanio - 1);
-        return result;
-
-    }
-
-    private class HttpAsyncTaskAgenda extends AsyncTask<String, Void, String> {
-        @Override
-        protected String doInBackground(String... urls) {
-
-            return GETAGENDA(urls[0]);
-        }
-
-        // onPostExecute displays the results of the AsyncTask.
-        @Override
-        protected void onPostExecute(String result) {
-            try {
-                JSONObject json = new JSONObject(result); //Convierte String a JSONObject
-                prueba = json.getJSONArray("1").getString(1);
-
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -365,6 +376,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 qrBoton.hide();
                 menu.clear();
                 AgendaUnl agenda = new AgendaUnl();
+                agenda.setListaDto(listaDto);
                 fm.beginTransaction().replace(R.id.fragment_container, agenda).addToBackStack(null).commit();
 
             }
