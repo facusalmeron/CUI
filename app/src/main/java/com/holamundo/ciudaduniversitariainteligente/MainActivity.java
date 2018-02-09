@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ultimasBusquedas ultimasBusquedas = null;
     private Menu menu = null;
     private BaseDatos CUdb = null;
+    private String prueba;
 
     /*Funciones*/
 
@@ -73,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbar);
 
         //Instancio la base de datos
-        CUdb = new BaseDatos(getApplicationContext(), "DBCUI", null, 27);
+        CUdb = new BaseDatos(getApplicationContext(), "DBCUI", null, 1);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             requestPermissions(INITIAL_PERMS, INITIAL_REQUEST);
@@ -101,6 +102,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //Agrego TextView abajo trayendo datos del webService del clima
         textClima = (TextView) findViewById(R.id.textWSClima);
         new HttpAsyncTask().execute("http://api.wunderground.com/api/e8cd515cb766a5bf/lang:SP/forecast/geolookup/q/-31.6182466,-60.7013970,15.json");
+        new HttpAsyncTaskAgenda().execute("https://www.unl.edu.ar/agenda/webapp.php?act=getJerarquicos&cantidad=1");
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -192,6 +194,70 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 String ubicacion = json.getJSONObject("location").getString("city");
 
                 textClima.setText(diaSemana + " " + dia + " " + mes + " - " + temperatura + "ºC - " + ubicacion);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+        }
+    }
+
+    public static String GETAGENDA(String url) {
+        InputStream inputStream = null;
+        String result = "";
+        try {
+
+            // create HttpClient
+            HttpClient httpclient = new DefaultHttpClient();
+
+            // make GET request to the given URL
+            HttpResponse httpResponse = httpclient.execute(new HttpGet(url));
+
+            // receive response as inputStream
+            inputStream = httpResponse.getEntity().getContent();
+
+            // convert inputstream to string
+            if (inputStream != null)
+                result = convertInputStreamToStringAgenda(inputStream);
+            else
+                result = "Did not work!";
+
+        } catch (Exception e) {
+            Log.d("InputStream", e.getLocalizedMessage());
+        }
+
+        return result;
+    }
+
+    private static String convertInputStreamToStringAgenda(InputStream inputStream) throws IOException {
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+        String line = "";
+        String result = "";
+        while ((line = bufferedReader.readLine()) != null)
+            result += line;
+
+        inputStream.close();
+        int tamanio = result.length();
+        result = result.substring(1, tamanio - 1);
+        return result;
+
+    }
+
+    private class HttpAsyncTaskAgenda extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... urls) {
+
+            return GETAGENDA(urls[0]);
+        }
+
+        // onPostExecute displays the results of the AsyncTask.
+        @Override
+        protected void onPostExecute(String result) {
+            try {
+                JSONObject json = new JSONObject(result); //Convierte String a JSONObject
+                prueba = json.getJSONArray("1").getString(1);
+
 
             } catch (JSONException e) {
                 e.printStackTrace();
