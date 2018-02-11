@@ -1,5 +1,7 @@
 package com.holamundo.ciudaduniversitariainteligente;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -126,6 +128,23 @@ public class InfoFacultades extends Fragment {
                 }
             }
         });
+
+
+            imagenFacultad.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (paginaFacultad.getText().toString().length() > 0){
+                        Uri uri = Uri.parse(paginaFacultad.getText().toString());
+                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                        startActivity(intent);
+                    }else{
+                        Toast.makeText(getActivity(), "Primero debe ingresar la Facultad a buscar",Toast.LENGTH_LONG).show();
+                    }
+
+                }
+            });
+
+
 
     return rootView;
 }

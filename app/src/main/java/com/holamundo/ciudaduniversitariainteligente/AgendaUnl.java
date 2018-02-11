@@ -1,13 +1,18 @@
 package com.holamundo.ciudaduniversitariainteligente;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.Drawable;
 import android.inputmethodservice.Keyboard;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.CalendarContract;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -40,6 +45,7 @@ import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -77,8 +83,11 @@ public class AgendaUnl extends Fragment{
                 Map<String, String> aug = new HashMap<String, String>();
                 aug.put("nameEvento", dto.getNombreEvento());
 
-                DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+                DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm");
                 Date fevento = new Date(Long.parseLong(dto.getFechaEvento())*1000);
+                Calendar cal = Calendar.getInstance();
+                cal.setTimeInMillis(Long.parseLong(dto.getFechaEvento())*1000);
+                dto.setFevento(cal);
                 String fecha = df.format(fevento);
                 aug.put("fechaEvento",fecha);
 
@@ -88,20 +97,19 @@ public class AgendaUnl extends Fragment{
             String[] keys = {"nameEvento","fechaEvento"};
             int[] widgetIds = {android.R.id.text1, android.R.id.text2};
             SimpleAdapter crsAdapter = new SimpleAdapter(getActivity(),crsList,android.R.layout.simple_list_item_2, keys,widgetIds);
-/*
+
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    String enlace = listaDto.get(i).getUrlEvento();
-                    getActivity().setContentView(R.layout.web_view_agenda);
-                    WebView browser =(WebView) listView.findViewById(R.id.webViewAgenda);
-                    browser.getSettings().setJavaScriptEnabled(true);
-                    browser.setWebViewClient(new WebViewClient());
-                    browser.loadUrl(enlace);
+                    String enlace = "https:" + listaDto.get(i).getUrlEvento();
+                    Calendar fevento = listaDto.get(i).getFevento();
+                    String nEvento = listaDto.get(i).getNombreEvento();
+                    showAlertDialog(fevento, enlace, nEvento);
+
 
                 }
             });
-*/
+
 
             listView.setAdapter(crsAdapter);
 
@@ -117,15 +125,36 @@ public class AgendaUnl extends Fragment{
         this.oMainActivity = oMA;
     }
 
-    private class SwAWebClient extends WebViewClient {
-        @Override
-        public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            return false;
-        }
+    public void showAlertDialog(final Calendar fechaEvento, final String urlEvento, final String nombreEvento){
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
+        alertDialog.setTitle("Confirme opción a realizar");
+        alertDialog.setMessage("Ud. puede Agendar el evento o visitar la página del mismo");
+        alertDialog.setPositiveButton("Agendar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                agregar(fechaEvento, nombreEvento);
+            }
+        });
+
+        alertDialog.setNegativeButton("Ver URL", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Uri uri = Uri.parse(urlEvento);
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+            }
+        });
+        alertDialog.show();
     }
 
-
-
+    public void agregar(Calendar cal, String nombreEvento){
+        Intent intent = new Intent(Intent.ACTION_EDIT);
+        intent.setType("vnd.android.cursor.item/event");
+        intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, cal.getTimeInMillis());
+        intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, cal.getTimeInMillis() + 60 *60*1000);
+        intent.putExtra(CalendarContract.Events.TITLE, nombreEvento);
+        startActivity(intent);
+    }
 
 
 }
