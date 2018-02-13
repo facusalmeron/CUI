@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbar);
 
         //Instancio la base de datos
-        CUdb = new BaseDatos(getApplicationContext(), "DBCUI", null, 200);
+        CUdb = new BaseDatos(getApplicationContext(), "DBCUI", null, 206);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             requestPermissions(INITIAL_PERMS, INITIAL_REQUEST);
@@ -367,6 +367,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 qrBoton.hide();
                 menu.clear();
                 InfoFacultades infoFacultades = new InfoFacultades();
+                infoFacultades.setInformaciones(cargaInformacion());
                 fm.beginTransaction().replace(R.id.fragment_container, infoFacultades).addToBackStack(null).commit();
 
             }
@@ -435,6 +436,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //Funcion que le pasa a oArmaCamino un edificio y devuelve un Vector con todas los laboratorios de ese edificio
     public Vector<Punto> verLaboratoriosPorEdificio(String Edificio) {
         return oArmaCamino.verLaboratoriosPorEdificio(Edificio);
+    }
+
+
+    private List<InfoDto> cargaInformacion() {
+        List<InfoDto> infos = new ArrayList<InfoDto>();
+        SQLiteDatabase db1 = CUdb.getReadableDatabase();
+        Cursor c = db1.rawQuery("SELECT *  FROM Informacion", null);
+        c.moveToFirst();
+
+        if (c.getCount() > 0) {
+            do {
+                InfoDto info = new InfoDto(c.getInt(0), c.getString(1), c.getString(2), c.getString(3), c.getString(4), c.getString(5), c.getString(6));
+                infos.add(info);
+            } while (c.moveToNext());
+        }
+        return infos;
     }
 
 

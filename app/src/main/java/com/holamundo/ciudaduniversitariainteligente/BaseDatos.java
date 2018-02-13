@@ -16,26 +16,26 @@ public class BaseDatos extends SQLiteOpenHelper {
 
     private static final String INSERT_CONEXION_TEMPLATE = new String("INSERT INTO Conexiones (idDesde, idHasta) VALUES (%s, %s)");
 
+    private static final String INSERT_INFORMACION_TEMPLATE = new String("INSERT INTO Informacion (id, nombre, localidad, direccion, telefono, fax, pagina) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s')");
+
     public BaseDatos(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
     }
-
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         cargaDB(sqLiteDatabase);
 
     }
-
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS Busquedas");
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS Punto");
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS Conexiones");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS Informacion");
 
         //Se crea la nueva versión de las tablas
         cargaDB(sqLiteDatabase);
     }
-
 
     public void cargaDB(SQLiteDatabase sqLiteDatabase){
         //Creo las tablas
@@ -44,6 +44,17 @@ public class BaseDatos extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("CREATE TABLE Busquedas (nombre TEXT, edificio TEXT)");
         sqLiteDatabase.execSQL("CREATE TABLE Punto (id TEXT, latitud TEXT, longitud TEXT, edificio TEXT, piso TEXT, nombre TEXT, imagen TEXT)");
         sqLiteDatabase.execSQL("CREATE TABLE Conexiones (idDesde TEXT, idHasta TEXT)");
+        sqLiteDatabase.execSQL("CREATE TABLE Informacion (id TEXT, nombre TEXT, localidad TEXT, direccion TEXT, telefono TEXT, fax TEXT, pagina TEXT)");
+
+        sqLiteDatabase.execSQL(String.format(INSERT_INFORMACION_TEMPLATE, 0, "", "", "", "", "", ""));
+        sqLiteDatabase.execSQL(String.format(INSERT_INFORMACION_TEMPLATE, 1, "Facultad de Ingeniería y Ciencias Hídricas", "(3000) Santa Fe - Argentina", "Ciudad Universitaria. Ruta Nacional N° 168 - Km 472,4", "Tel.:(+54) (0342) 4575233 / 34 / 39 / 44 / 45", "Fax:(+54) (0342) 457-5224", "http://fich.unl.edu.ar/"));
+        sqLiteDatabase.execSQL(String.format(INSERT_INFORMACION_TEMPLATE, 2, "Facultad de Bioquímica y Ciencias Biológicas", "(3000) Santa Fe - Argentina", "Ciudad Universitaria. Ruta Nacional N° 168 - Km 472,4", "Tel.: +54 (342) 4575215 /4575216", "Fax: +54 (342) 4575216", "http://www.fbcb.unl.edu.ar/"));
+        sqLiteDatabase.execSQL(String.format(INSERT_INFORMACION_TEMPLATE, 3, "Facultad de Ciencias Médicas", "(3000) Santa Fe - Argentina", "Ciudad Universitaria. Ruta Nacional N° 168 - Km 472,4", "Tel: (54) 0342 - 4575116/7", "Fax: -----", "http://www.fcm.unl.edu.ar/"));
+        sqLiteDatabase.execSQL(String.format(INSERT_INFORMACION_TEMPLATE, 4, "Facultad de Arquitectura, Diseño y Urbanismo", "(3000) Santa Fe - Argentina", "Ciudad Universitaria. Ruta Nacional N° 168 - Km 472,4", "Tel: +54 (342) 4575100", "Fax: +54 (342) 4575112", "http://www.fadu.unl.edu.ar/"));
+        sqLiteDatabase.execSQL(String.format(INSERT_INFORMACION_TEMPLATE, 5, "Facultad de Humanidades y Ciencias", "(3000) Santa Fe - Argentina", "Ciudad Universitaria. Ruta Nacional N° 168 - Km 472,4", "Tel: +54 (0342) 4575105", "Fax: +54 (0342) 4575105", "http://www.fhuc.unl.edu.ar/"));
+        sqLiteDatabase.execSQL(String.format(INSERT_INFORMACION_TEMPLATE, 6, "Instituto Superior de Música", "(3000) Santa Fe - Argentina", "Ciudad Universitaria. Ruta Nacional N° 168 - Km 472,4", "Tel: +54 (0342) 4511622/3", "Fax: ----------", "http://www.ism.unl.edu.ar/"));
+        sqLiteDatabase.execSQL(String.format(INSERT_INFORMACION_TEMPLATE, 7, "Facultad de Ciencias Económicas", "(3000) Santa Fe - Argentina", "Moreno 2557", "Tel: (54) 0342 - 4571180 / 4571181", "Fax: +54 (342) 4551222", "http:/www.fce.unl.edu.ar/"));
+
         sqLiteDatabase.execSQL(String.format(INSERT_PUNTO_TEMPLATE, 0, "-31.640935", "-60.671913", "Ciudad Universitaria", 0, "Ciudad Universitaria", -1));
         sqLiteDatabase.execSQL(String.format(INSERT_PUNTO_TEMPLATE, 1, "-31.639950", "-60.671896", "FICH", 0, "Entrada FICH", -1));
         sqLiteDatabase.execSQL(String.format(INSERT_PUNTO_TEMPLATE, 2, "-31.639953", "-60.672090", "FCBC", 0, "Aula Magna", -1));

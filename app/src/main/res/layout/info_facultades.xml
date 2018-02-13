@@ -55,38 +55,8 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/nombreFacultad"
+            android:id="@+id/informacionFacultad"
             android:layout_below="@+id/imagenFacultad"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/localidadFacultad"
-            android:layout_below="@+id/nombreFacultad"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/direccionFacultad"
-            android:layout_below="@+id/localidadFacultad"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/telefonoFacultad"
-            android:layout_below="@+id/direccionFacultad"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/faxFacultad"
-            android:layout_below="@+id/telefonoFacultad"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/paginaFacultad"
-            android:layout_below="@+id/faxFacultad"/>
 
     </RelativeLayout>
 

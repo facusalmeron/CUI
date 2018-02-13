@@ -14,6 +14,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Facundo on 7/1/2018.
  */
@@ -23,6 +26,16 @@ public class InfoFacultades extends Fragment {
     private Spinner spinnerBusqueda = null;
     private Button botonBusqueda = null;
     private MainActivity oMainActivity = null;
+    private int contador = 0;
+    public List<InfoDto> getInformaciones() {
+        return informaciones;
+    }
+
+    public void setInformaciones(List<InfoDto> informaciones) {
+        this.informaciones = informaciones;
+    }
+
+    private List<InfoDto> informaciones = new ArrayList<InfoDto>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -38,12 +51,7 @@ public class InfoFacultades extends Fragment {
 
         final ImageView imagenFacultad = (ImageView) rootView.findViewById(R.id.imagenFacultad);
         imagenFacultad.setImageResource(R.drawable.info);
-        final TextView nombreFacultad = (TextView) rootView.findViewById(R.id.nombreFacultad);
-        final TextView localidadFacultad = (TextView) rootView.findViewById(R.id.localidadFacultad);
-        final TextView direccionFacultad = (TextView) rootView.findViewById(R.id.direccionFacultad);
-        final TextView telefonoFacultad = (TextView) rootView.findViewById(R.id.telefonoFacultad);
-        final TextView faxFacultad = (TextView) rootView.findViewById(R.id.faxFacultad);
-        final TextView paginaFacultad = (TextView) rootView.findViewById(R.id.paginaFacultad);
+        final TextView informacionFacultad = (TextView) rootView.findViewById(R.id.informacionFacultad);
 
         botonBusqueda.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,88 +61,56 @@ public class InfoFacultades extends Fragment {
                     switch (spinnerBusqueda.getSelectedItem().toString()){
                         case "FICH":
                             imagenFacultad.setImageResource(R.drawable.fich_info);
-                            nombreFacultad.setText("Facultad de Ingeniería y Ciencias Hídricas");
-                            localidadFacultad.setText("(3000) Santa Fe - Argentina");
-                            direccionFacultad.setText("Ciudad Universitaria. Ruta Nacional N° 168 - Km 472,4");
-                            telefonoFacultad.setText("Tel.:(+54) (0342) 4575233 / 34 / 39 / 44 / 45");
-                            faxFacultad.setText("Fax:(+54) (0342) 457-5224");
-                            paginaFacultad.setText("http://fich.unl.edu.ar/");
+                            informacionFacultad.setText(informaciones.get(1).getNombre()+"\n"+informaciones.get(1).getLocalidad()+"\n"+informaciones.get(1).getDireccion()+"\n"+informaciones.get(1).getTelefono()+"\n"+informaciones.get(1).getFax()+"\n"+informaciones.get(1).getPagina());
+                            contador = 1;
                             break;
                         case "FBCB":
                             imagenFacultad.setImageResource(R.drawable.fbcb_info);
-                            nombreFacultad.setText("Facultad de Bioquímica y Ciencias Biológicas");
-                            localidadFacultad.setText("(3000) Santa Fe - Argentina");
-                            direccionFacultad.setText("Ciudad Universitaria. Ruta Nacional N° 168 - Km 472,4");
-                            telefonoFacultad.setText("Tel.: +54 (342) 4575215 /4575216");
-                            faxFacultad.setText("Fax: +54 (342) 4575216");
-                            paginaFacultad.setText("http://www.fbcb.unl.edu.ar/");
+                            informacionFacultad.setText(informaciones.get(2).getNombre()+"\n"+informaciones.get(2).getLocalidad()+"\n"+informaciones.get(2).getDireccion()+"\n"+informaciones.get(2).getTelefono()+"\n"+informaciones.get(2).getFax()+"\n"+informaciones.get(2).getPagina());
+                            contador = 2;
                             break;
                         case "FCM":
                             imagenFacultad.setImageResource(R.drawable.fcm_info);
-                            nombreFacultad.setText("Facultad de Ciencias Médicas");
-                            localidadFacultad.setText("(3000) Santa Fe - Argentina");
-                            direccionFacultad.setText("Ciudad Universitaria. Ruta Nacional N° 168 - Km 472,4");
-                            telefonoFacultad.setText("Tel: (54) 0342 - 4575116/7");
-                            faxFacultad.setText("Fax: -----");
-                            paginaFacultad.setText("http://www.fcm.unl.edu.ar/");
+                            informacionFacultad.setText(informaciones.get(3).getNombre()+"\n"+informaciones.get(3).getLocalidad()+"\n"+informaciones.get(3).getDireccion()+"\n"+informaciones.get(3).getTelefono()+"\n"+informaciones.get(3).getFax()+"\n"+informaciones.get(3).getPagina());
+                            contador = 3;
                             break;
                         case "FADU":
                             imagenFacultad.setImageResource(R.drawable.fadu_info);
-                            nombreFacultad.setText("Facultad de Arquitectura, Diseño y Urbanismo");
-                            localidadFacultad.setText("(3000) Santa Fe - Argentina");
-                            direccionFacultad.setText("Ciudad Universitaria. Ruta Nacional N° 168 - Km 472,4");
-                            telefonoFacultad.setText("Tel: +54 (342) 4575100 ");
-                            faxFacultad.setText("Fax: +54 (342) 4575112");
-                            paginaFacultad.setText("http://www.fadu.unl.edu.ar/");
+                            informacionFacultad.setText(informaciones.get(4).getNombre()+"\n"+informaciones.get(4).getLocalidad()+"\n"+informaciones.get(4).getDireccion()+"\n"+informaciones.get(4).getTelefono()+"\n"+informaciones.get(4).getFax()+"\n"+informaciones.get(4).getPagina());
+                            contador = 4;
                             break;
                         case "FHUC":
                             imagenFacultad.setImageResource(R.drawable.fhuc_info);
-                            nombreFacultad.setText("Facultad de Humanidades y Ciencias");
-                            localidadFacultad.setText("(3000) Santa Fe - Argentina");
-                            direccionFacultad.setText("Ciudad Universitaria. Ruta Nacional N° 168 - Km 472,4");
-                            telefonoFacultad.setText("Tel: +54 (0342) 4575105");
-                            faxFacultad.setText("Fax: +54 (0342) 4575105");
-                            paginaFacultad.setText("http://www.fhuc.unl.edu.ar/");
+                            informacionFacultad.setText(informaciones.get(5).getNombre()+"\n"+informaciones.get(5).getLocalidad()+"\n"+informaciones.get(5).getDireccion()+"\n"+informaciones.get(5).getTelefono()+"\n"+informaciones.get(5).getFax()+"\n"+informaciones.get(5).getPagina());
+                            contador = 5;
                             break;
                         case "ISM":
                             imagenFacultad.setImageResource(R.drawable.ism_info);
-                            nombreFacultad.setText("Instituto Superior de Música");
-                            localidadFacultad.setText("(3000) Santa Fe - Argentina");
-                            direccionFacultad.setText("Ciudad Universitaria. Ruta Nacional N° 168 - Km 472,4");
-                            telefonoFacultad.setText("Tel: +54 (0342) 4511622/3");
-                            faxFacultad.setText("Fax: ----------");
-                            paginaFacultad.setText("http://www.ism.unl.edu.ar/");
+                            informacionFacultad.setText(informaciones.get(6).getNombre()+"\n"+informaciones.get(6).getLocalidad()+"\n"+informaciones.get(6).getDireccion()+"\n"+informaciones.get(6).getTelefono()+"\n"+informaciones.get(6).getFax()+"\n"+informaciones.get(6).getPagina());
+                            contador = 6;
                             break;
                         case "FCE":
                             imagenFacultad.setImageResource(R.drawable.fce_info);
-                            nombreFacultad.setText("Facultad de Ciencias Económicas");
-                            localidadFacultad.setText("(3000) Santa Fe - Argentina");
-                            direccionFacultad.setText("Moreno 2557");
-                            telefonoFacultad.setText("Tel: (54) 0342 - 4571180 / 4571181");
-                            faxFacultad.setText("Fax: +54 (342) 4551222");
-                            paginaFacultad.setText("http://www.fce.unl.edu.ar/");
+                            informacionFacultad.setText(informaciones.get(7).getNombre()+"\n"+informaciones.get(7).getLocalidad()+"\n"+informaciones.get(7).getDireccion()+"\n"+informaciones.get(7).getTelefono()+"\n"+informaciones.get(7).getFax()+"\n"+informaciones.get(7).getPagina());
+                            contador = 7;
                             break;
                     }
                 }
                 else{
                     imagenFacultad.setImageResource(R.drawable.info);
-                    nombreFacultad.setText("");
-                    localidadFacultad.setText("");
-                    direccionFacultad.setText("");
-                    telefonoFacultad.setText("");
-                    faxFacultad.setText("");
-                    paginaFacultad.setText("");
+                    informacionFacultad.setText(informaciones.get(0).getNombre()+"\n"+informaciones.get(0).getLocalidad()+"\n"+informaciones.get(0).getDireccion()+"\n"+informaciones.get(0).getTelefono()+"\n"+informaciones.get(0).getFax()+"\n"+informaciones.get(0).getPagina());
+                    contador = 0;
                     Toast.makeText(getActivity(), "Primero debe ingresar la Facultad a buscar",Toast.LENGTH_LONG).show();
                 }
             }
         });
 
 
-            imagenFacultad.setOnClickListener(new View.OnClickListener() {
+           imagenFacultad.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (paginaFacultad.getText().toString().length() > 0){
-                        Uri uri = Uri.parse(paginaFacultad.getText().toString());
+                    if (contador != 0){
+                        Uri uri = Uri.parse(informaciones.get(contador).getPagina());
                         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                         startActivity(intent);
                     }else{
