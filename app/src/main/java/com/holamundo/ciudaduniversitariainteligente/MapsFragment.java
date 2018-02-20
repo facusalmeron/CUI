@@ -184,7 +184,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Sensor
         //Muevo la camara hasta mi posicion y agrego un marcador allí
         LatLng position = new LatLng(this.lat, this.lon);
         if (lat == 0.0 && lon == 0.0){
-            LatLng positionApagada = new LatLng(-31.641274, -60.672846);
+            LatLng positionApagada = new LatLng(-31.641158, -60.671870);
             miMapa.moveCamera(CameraUpdateFactory.newLatLng(positionApagada));
         }else{
             miMapa.moveCamera(CameraUpdateFactory.newLatLng(position));

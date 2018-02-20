@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         //Agrego TextView abajo trayendo datos del webService del clima
         textClima = (TextView) findViewById(R.id.textWSClima);
-        new HttpAsyncTask().execute("http://api.wunderground.com/api/e8cd515cb766a5bf/lang:SP/forecast/geolookup/q/-31.6182466,-60.7013970,15.json");
+        new HttpAsyncTask().execute("http://api.wunderground.com/api/e8cd515cb766a5bf/lang:SP/forecast/geolookup/q/-31.6358630444,-60.705443881,15.json");
         new HttpAsyncTaskAgenda().execute("https://www.unl.edu.ar/agenda/webapp.php?act=getJerarquicos&cantidad=" + String.valueOf(total));
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -266,7 +266,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         getJSONObject("simpleforecast").
                         getJSONArray("forecastday").getJSONObject(0).getJSONObject("high").getString("celsius");
 
-                String ubicacion = json.getJSONObject("location").getString("city");
+                String ubicacion = json.getJSONObject("location").
+                        getJSONObject("nearby_weather_stations").
+                        getJSONObject("pws").
+                        getJSONArray("station").getJSONObject(0).getString("city");
 
                 textClima.setText(diaSemana + " " + dia + " " + mes + " - " + temperatura + "ºC - " + ubicacion);
 
